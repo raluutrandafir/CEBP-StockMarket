@@ -26,19 +26,19 @@ Implement/simulate a stock market where shares are being traded. The shares belo
     -	Ask/Request for a certain stock
     -	Check the price of a stock 
     -	Have an amount of money to buy a certain amount of stocks/ have an amount of stocks to sell at a certain price
-    -	Keep track of a transactions history
+    -	Keep track of a transactions history (optional)
 -	The stock market:
     -	Keeps track of the current stocks(prices, offer/request)
     -	Adjust stocks based on what gets sold
     -	Match an offer for selling with an offer for buying
     -	Adjust the buyers stocks, money according to what he bought/Adjust a seller’s stocks, money amount according to what he sold
     -	Keep track of a transactions history
-    -	Change stock’s price based on the supply demand
+    -	Change stock’s price based on the supply demand (tdb)
 
 ## Non-Functional Requirements
 
 -	System will be resilient to failures
--	A request will be fulfilled it at most 1 min
+-	A request will be fulfilled in at most 1 min, if not, the state of the request will remain on pending until it gets a response
 -	Documentation   
 
 ## Architectural diagram
