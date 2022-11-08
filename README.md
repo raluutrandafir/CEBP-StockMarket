@@ -19,8 +19,8 @@ Implement/simulate a stock market where shares are being traded. The shares belo
 
 ## Functional Requirements
 
--	Clients can be seller(if he owns stocks) or buyer(if wants to buy stocks)
--	Clients can:
+-	Entities can be seller(if he owns stocks) or buyer(if wants to buy stocks)
+-	Entities can:
     -	Ask for certain amount of money for a stock he owns/he wants to sell
     -	Ask/Read for available stocks
     -	Ask/Request for a certain stock
