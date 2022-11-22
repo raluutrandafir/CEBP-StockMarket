@@ -6,7 +6,7 @@ public class Offer {
     private long offer_id; // offer id
     private Client client; // basic data from client
     private Stock stock; // basic data from stock
-    private Type type; // buyer or seller
+
 
     public Offer(Client client, Stock stock, Type type, long id) {
         this.offer_id= id;
