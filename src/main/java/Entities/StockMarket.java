@@ -1,59 +1,94 @@
 package Entities;
 
 import miscellaneous.Type;
+import miscellaneous.ProtectedList;
+import Entities;
 import java.util.concurrent.ConcurrentHashMap;
 
 // Q: should the stock market have a list of stocks
 // or should it extract the stocks from the offers on the market?
 
 public class StockMarket {
-    private ConcurrentHashMap<Long, Offer> all_offers; // arraylist of all buyer and seller offers
-    private ConcurrentHashMap<Long, Transaction> all_transactions; // arraylist of all the transactions done on the market
+    private ProtectedList<Transaction> sellOffers;
+    private ProtectedList<Transaction> buyRequests;
+    private ProtectedList<Transaction> terminated;
 
-    public StockMarket() {
-        this.all_offers = new ConcurrentHashMap<>();
-        this.all_transactions = new ConcurrentHashMap<>();
+    public WallStreet() {
+        sellOffers = new ProtectedList<>();
+        buyRequests = new ProtectedList<>();
+        terminated = new ProtectedList<>();
     }
 
-    public ConcurrentHashMap<Long, Offer> getAll_offers() {
-        return all_offers;
+    public List<Transaction> getSellOffers() {
+        return sellOffers.getList();
     }
 
-    // Get offer by ticker and type
-    public ConcurrentHashMap<Long, Offer> getOffersByTickerAndType(String ticker, Type type) {
-        ConcurrentHashMap<Long, Offer> offers = new ConcurrentHashMap<>();
-        for(Offer offer : all_offers.values()){
-            // if the current offer has the same ticker as the requested one and the same type
-            if(offer.getStock().getTicker().equals(ticker) && offer.getType().equals(type))
-                offers.put(offer.getId(), offer);
+    public List<Transaction> getBuyRequests() {
+        return buyRequests.getList();
+    }
+
+    public List<Transaction> getAllOffers() {
+        List<Transaction> all = getSellOffers();
+        all.addAll(getBuyRequests());
+        return all;
+    }
+
+    public List<Transaction> getTerminated() {
+        return terminated.getList();
+    }
+
+    public void addSellOffer(Transaction t) {
+        sellOffers.add(t);
+    }
+
+    public void addBuyRequest(Transaction t) {
+        buyRequests.add(t);
+    }
+
+    public synchronized void removeAllSellOffers(List<Transaction> list) {
+        for (Transaction t : list)
+            sellOffers.remove(t);
+    }
+
+    public synchronized void removeAllBuyRequests(List<Transaction> list) {
+        for (Transaction t : list)
+            buyRequests.remove(t);
+    }
+
+    public Transaction getSellOffer(float price) {
+        return getOffer(price, sellOffers.getList());
+    }
+
+    public Transaction getBuyOffer(float price) {
+        return getOffer(price, buyRequests.getList());
+    }
+
+    private Transaction getOffer(float price, List<Transaction> offers) {
+        for (Transaction offer : offers) {
+            if (offer.getPrice() == price)
+                return offer;
         }
-        return offers;
+        return null;
     }
 
-    // Get offers by type only
-    public ConcurrentHashMap<Long, Offer> getOffersByType(Type type) {
-        ConcurrentHashMap<Long, Offer> typeOffers = new ConcurrentHashMap<>();
-        for(Offer offer : all_offers.values()){
-            // if the current offer has the same type as the requested one
-            if(offer.getType().equals(type))
-                typeOffers.put(offer.getId(), offer);
-        }
-        return typeOffers;
+    public Transaction doTransaction(Transaction sell, Transaction buy) {
+        return new Transaction(sell, buy);
     }
 
-    // Get offers by ticker only
-    public ConcurrentHashMap<Long, Offer> getOffersByTicker(String ticker) {
-        ConcurrentHashMap<Long, Offer> tickerOffers = new ConcurrentHashMap<>();
-        for(Offer offer : all_offers.values()){
-            // if the current offer has the same ticker as the requested one
-            if(offer.getStock().getTicker().equals(ticker))
-                tickerOffers.put(offer.getId(), offer);
-        }
-        return tickerOffers;
+    public synchronized boolean finishTransaction(Transaction t, Transaction sell, Transaction buy) {
+        if (!sellOffers.contains(sell) || !buyRequests.contains(buy))
+            return false;
+        sellOffers.remove(sell);
+        buyRequests.remove(buy);
+        terminated.add(t);
+        return true;
     }
 
-    public ConcurrentHashMap<Long, Transaction> getAll_transactions() {
-        return all_transactions;
+    public boolean removeBuyRequest(Transaction myTransaction) {
+        return buyRequests.remove(myTransaction);
     }
 
+    public boolean removeSellOffer(Transaction myTransaction) {
+        return sellOffers.remove(myTransaction);
+    }
 }
