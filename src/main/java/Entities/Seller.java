@@ -1,12 +1,43 @@
 package Entities;
 
-import java.util.ArrayList;
 
-public class Seller extends Client{
-    public Seller(long id, float money, ArrayList<Stock> stocks) {
-        super(id, money, stocks);
+import com.stock.transactions.Transaction;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.List;
+
+import static miscellaneous.Type.SELLER;
+
+public class Seller extends Client {
+    @Override
+    protected boolean removeTransaction(Transaction myTransaction) {
+        return StockMarket.removeSellOffer(myTransaction);
     }
 
-    private void sellStocks(){
+    public  Seller(Socket socket, BufferedReader in) throws IOException {
+        super(socket, in);
+        this.type = SELLER;
+    }
+
+    @Override
+    protected void removeTransactions(List<Transaction> myTransactions) {
+        StockMarket.removeAllSellOffers(myTransactions);
+    }
+
+    @Override
+    protected void doTransaction(Transaction sell) {
+        transactionHistory.add(sell);
+        StockMarket.addSellOffer(sell);
+        boolean searching = true;
+        Transaction buy;
+
+        while ( (buy = StockMarket.getBuyOffer(sell.getPrice())) != null && searching )
+            searching = isSearching(sell, buy);
+
+        if (!searching)
+            transactionHistory.remove(sell);
     }
 }
+
