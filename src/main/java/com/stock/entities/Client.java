@@ -13,7 +13,7 @@ public abstract class Client implements Runnable{
     private Socket socket;
     final static StockMarket stockMarket = new StockMarket();
     private BufferedReader input;
-    private PrintWriter writer;
+//    private PrintWriter writer;
     protected Type type; // buyer or seller
     protected ArrayList<Transaction> transactionHistory;
 
@@ -21,7 +21,7 @@ public abstract class Client implements Runnable{
         System.out.println("New client created :)");
         this.socket = socket;
         this.input = input;
-        this.writer = new PrintWriter(socket.getOutputStream(), true);
+//        this.writer = new PrintWriter(socket.getOutputStream(), true);
         this.transactionHistory = new ArrayList<>();
     }
 
@@ -106,7 +106,7 @@ public abstract class Client implements Runnable{
         removeTransactions(transactionHistory);
         transactionHistory.clear();
         input.close();
-        writer.close();
+//        writer.close();
         socket.close();
     }
 
@@ -115,11 +115,12 @@ public abstract class Client implements Runnable{
         return input.readLine();
     }
 
-    // ???????
     private void sendList(List list) {
-        writer.println(list.size());
+//        writer.println(list.size());
+        System.out.println(list.size());
         for (Object o : list) {
-            writer.println(o.toString());
+//            writer.println(o.toString());
+            System.out.println(o.toString());
         }
     }
 
