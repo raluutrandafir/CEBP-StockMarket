@@ -1,4 +1,6 @@
-package Entities;
+package com.stock.entities;
+
+import com.stock.miscellaneous.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,17 +10,17 @@ public class Transaction {
     private String secondClient = null;
     private int amount;
     private float price;
-    private String transactionType;
+    private Type transactionType;
     private Date date;
     private SimpleDateFormat format;
 
-    public Transaction(String clientName, int amount, float price, String transactionType) {
+    public Transaction(String clientName, int amount, float price, Type transactionType) {
         this.clientName = clientName;
         this.amount = amount;
         this.price = price;
-        transactionType = transactionType;
-        date = new Date(System.currentTimeMillis());
-        format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        this.transactionType = transactionType;
+        this.date = new Date(System.currentTimeMillis());
+        this.format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     }
 
     public Transaction(Transaction sell, Transaction buy){
@@ -26,9 +28,9 @@ public class Transaction {
         this.secondClient = buy.clientName;
         this.price = sell.price;
         this.amount = Math.min(sell.amount, buy.amount);
-        transactionType = "Sold to: ";
-        date = new Date(System.currentTimeMillis());
-        format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        this.transactionType = Type.SELLER;
+        this.date = new Date(System.currentTimeMillis());
+        this.format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     }
 
     public int getAmount() {
@@ -49,7 +51,7 @@ public class Transaction {
         if (secondClient != null)
             delimiter.append(secondClient).append(" ");
 
-        return clientName + " " + transactionType + delimiter.toString() + amount + " stocks for " + price +
+        return clientName + " " + transactionType + delimiter + amount + " stocks for " + price +
                 " per stock. Started date: " + format.format(date);
     }
 

@@ -1,16 +1,17 @@
-package com.stock;
+package com.stock.miscellaneous;
 
 import java.util.ArrayList;
-import java.util.List;
-import sun.awt.Mutex;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ProtectedList<K> {
-    private ArrayList<K> list = new ArrayList();
+    private ArrayList<K> list;
     private static int nrReaders = 0;
-    private final Mutex read = new Mutex();
-    private final Mutex write = new Mutex();
+    private final Lock  read = new ReentrantLock ();
+    private final Lock  write = new ReentrantLock ();
 
     public ProtectedList() {
+        this.list = new ArrayList<>();
     }
 
     private void startRead() {
@@ -45,9 +46,9 @@ public class ProtectedList<K> {
         this.write.unlock();
     }
 
-    public List<K> getList() {
+    public ArrayList<K> getList() {
         this.startRead();
-        List<K> l = new ArrayList(this.list);
+        ArrayList<K> l = new ArrayList<>(this.list);
         this.endRead();
         return l;
     }

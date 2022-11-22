@@ -1,6 +1,6 @@
-package Entities;
+package com.stock.entities;
 
-import miscellaneous.Type;
+import com.stock.miscellaneous.Type;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,23 +11,11 @@ import java.util.List;
 
 public abstract class Client implements Runnable{
     private Socket socket;
-    private ArrayList<Stock> stocks; // owned stocks of client
-    private static StockMarket stockMarket = new StockMarket();
+    final static StockMarket stockMarket = new StockMarket();
     private BufferedReader input;
     private PrintWriter writer;
     protected Type type; // buyer or seller
     protected ArrayList<Transaction> transactionHistory;
-
-    // Full constructor
-    public Client(Socket socket, ArrayList<Stock> stocks, BufferedReader input, PrintWriter writer, Type type, List<Transaction> transactionHistory) throws IOException {\
-        System.out.println("New client created :)");
-        this.socket = socket;
-        this.stocks = stocks;
-        this.input = input;
-        this.writer = new PrintWriter(socket.getOutputStream(), true);
-        this.type = type;
-        this.transactionHistory = new ArrayList<>();
-    }
 
     public Client(Socket socket, BufferedReader input) throws IOException {
         System.out.println("New client created :)");
@@ -63,28 +51,28 @@ public abstract class Client implements Runnable{
                             String[] split = name.split(" index ");
                             int index = Integer.parseInt(split[1]);
                             name = split[0];
-                            if( removeTransaction(mytransactionList.get(index))) {
-                                mytransactionList.remove(index);
+                            if( removeTransaction(transactionHistory.get(index))) {
+                                transactionHistory.remove(index);
                                 doTransaction(new Transaction(name, amount, price, type));
                             }
                         } else
                             doTransaction(new Transaction(name, amount, price, type));
                         break;
                     case "Transactions":
-                        sendList(broker.getTerminated());
+                        sendList(stockMarket.getTerminated());
                         break;
                     case "Sell offers":
-                        sendList(broker.getSellOffers());
+                        sendList(stockMarket.getSellOffers());
                         break;
                     case "Buy offers":
-                        sendList(broker.getBuyRequests());
+                        sendList(stockMarket.getBuyRequests());
                         break;
                     case "All offers":
-                        sendList(broker.getAllOffers());
+                        sendList(stockMarket.getAllOffers());
                         break;
                     case  "My offers":
-                        mytransactionList.removeIf(transaction -> transaction.getAmount() == 0);
-                        sendList(mytransactionList);
+                        transactionHistory.removeIf(transaction -> transaction.getAmount() == 0);
+                        sendList(transactionHistory);
                         break;
                 }
             } catch (IOException e) {
@@ -94,17 +82,50 @@ public abstract class Client implements Runnable{
     }
 
     public boolean isSearching(Transaction sell, Transaction buy) {
+        // make the transaction
         Transaction transaction = stockMarket.doTransaction(sell, buy);
+
+        // if the transaction is finished successfully
         if (stockMarket.finishTransaction(transaction, sell, buy)) {
+            // adjust the money/stock amount for both clients
             sell.setAmount(sell.getAmount() - transaction.getAmount());
             buy.setAmount(buy.getAmount() - transaction.getAmount());
 
+            // ??????
             if (sell.getAmount() > 0)
-                broker.addSellOffer(sell);
+                stockMarket.addSellOffer(sell);
             if (buy.getAmount() > 0)
                 stockMarket.addBuyRequest(buy);
             return false;
         }
         return true;
     }
+
+    // Close the Socket connection
+    private void closeConnection() throws IOException {
+        removeTransactions(transactionHistory);
+        transactionHistory.clear();
+        input.close();
+        writer.close();
+        socket.close();
+    }
+
+    // Read from the keyboard
+    private String readInput() throws IOException {
+        return input.readLine();
+    }
+
+    // ???????
+    private void sendList(List list) {
+        writer.println(list.size());
+        for (Object o : list) {
+            writer.println(o.toString());
+        }
+    }
+
+    protected abstract void doTransaction(Transaction t);
+
+    protected abstract void removeTransactions(List<Transaction> myTransactions);
+
+    protected abstract boolean removeTransaction(Transaction myTransaction);
 }

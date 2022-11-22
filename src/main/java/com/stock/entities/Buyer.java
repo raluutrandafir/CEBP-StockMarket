@@ -1,12 +1,11 @@
-package Entities;
+package com.stock.entities;
 
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-import static miscellaneous.Type.BUYER;
+import static com.stock.miscellaneous.Type.BUYER;
 
 public class Buyer extends Client{
     public Buyer(Socket socket, BufferedReader in) throws IOException {
@@ -15,23 +14,23 @@ public class Buyer extends Client{
     }
     @Override
     protected boolean removeTransaction(Transaction myTransaction) {
-        return StockMarket.removeBuyRequest(myTransaction);
+        return stockMarket.removeBuyRequest(myTransaction);
     }
 
     @Override
     protected void removeTransactions(List<Transaction> myTransactions) {
-        StockMarket.removeAllBuyRequests(myTransactions);
+        stockMarket.removeAllBuyRequests(myTransactions);
     }
 
     @Override
     protected void doTransaction(Transaction buy) {
         transactionHistory.add(buy);
-        StockMarket.addBuyRequest(buy);
+        stockMarket.addBuyRequest(buy);
 
         boolean searching = true;
         Transaction sell;
 
-        while ( (sell = StockMarket.getSellOffer(buy.getPrice())) != null && searching)
+        while ( (sell = stockMarket.getSellOffer(buy.getPrice())) != null && searching)
             searching = isSearching(sell, buy);
 
         if (!searching)

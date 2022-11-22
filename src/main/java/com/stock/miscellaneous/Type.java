@@ -1,4 +1,4 @@
-package miscellaneous;
+package com.stock.miscellaneous;
 
 public enum Type {
     BUYER,

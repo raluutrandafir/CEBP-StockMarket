@@ -1,19 +1,15 @@
-package Entities;
+package com.stock.entities;
 
-import miscellaneous.Type;
-import miscellaneous.ProtectedList;
-import Entities;
-import java.util.concurrent.ConcurrentHashMap;
+import com.stock.miscellaneous.ProtectedList;
 
-// Q: should the stock market have a list of stocks
-// or should it extract the stocks from the offers on the market?
+import java.util.List;
 
 public class StockMarket {
     private ProtectedList<Transaction> sellOffers;
     private ProtectedList<Transaction> buyRequests;
     private ProtectedList<Transaction> terminated;
 
-    public WallStreet() {
+    public StockMarket() {
         sellOffers = new ProtectedList<>();
         buyRequests = new ProtectedList<>();
         terminated = new ProtectedList<>();
