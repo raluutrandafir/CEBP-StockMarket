@@ -4,7 +4,6 @@ import com.stock.miscellaneous.Type;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,10 @@ public abstract class Client implements Runnable{
         String command;
         while (!end) {
             try {
+                System.out.println("GIVE COMMAND: ");
                 command = readInput();
+                System.out.print("COMMAND: ");
+                System.out.println(command);
                 if (command == null) {
                     closeConnection();
                     break;
@@ -39,12 +41,16 @@ public abstract class Client implements Runnable{
                 String name;
                 switch (command) {
                     case "end":
+                        System.out.print("END");
                         closeConnection();
                         end = true;
                         break;
                     case "offer":
+                        System.out.print("Name:");
                         name = readInput();
+                        System.out.print("Amount:");
                         int amount = Integer.parseInt(readInput());
+                        System.out.print("Price:");
                         float price = Float.parseFloat(readInput());
 
                         if (name.contains("index")) {

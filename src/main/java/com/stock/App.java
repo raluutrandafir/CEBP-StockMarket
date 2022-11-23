@@ -14,10 +14,12 @@ public class App {
     public static void main(String[] args) throws Exception {
         try(ServerSocket serverSocket = new ServerSocket(5000)) {
             //noinspection InfiniteLoopStatement
+
             while(true) {
+                Socket mockClient = null;
                 // opening new Socket mock Client
                 try {
-                    Socket s = new Socket("localhost", 5000);
+                    mockClient = new Socket("localhost", 5000);
 
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
@@ -27,10 +29,12 @@ public class App {
 
                 Socket client = serverSocket.accept();
 
-                Client stockClient = getClient(client, "Seller");
+
+                Client stockClient = getClient(mockClient, "Seller");
                 System.out.println(stockClient);
-                new Thread(stockClient).start();
-                Thread.sleep(100000);
+                stockClient.run();
+//                new Thread(stockClient).start();
+                Thread.sleep(1000);
             }
         } catch(IOException e) {
             System.out.println("Server exception " + e.getMessage());
@@ -39,13 +43,15 @@ public class App {
 
     private static Client getClient(Socket client, String clientType) throws Exception {
         BufferedReader input = new BufferedReader(
-                new InputStreamReader(client.getInputStream()));
+                new InputStreamReader(System.in));
 
         System.out.println(client);
-        if (clientType.equals("Seller"))
+        if (clientType.equals("Seller")) {
             return new Seller(client, input);
-        else if (clientType.equals("Buyer"))
+        }
+        else if (clientType.equals("Buyer")){
             return new Buyer(client, input);
+        }
 
         return null;
     }
