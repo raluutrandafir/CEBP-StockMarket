@@ -111,7 +111,7 @@ public abstract class Client implements Runnable{
     private void closeConnection() throws IOException {
         removeTransactions(transactionHistory);
         transactionHistory.clear();
-        input.close();
+//        input.close();
 //        writer.close();
         socket.close();
     }
