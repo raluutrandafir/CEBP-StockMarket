@@ -9,14 +9,16 @@ public class Transaction {
     private long clientId;
     private long secondClient = -1;
     private int amount;
+    private String ticker;
     private float price;
     private Type transactionType;
     private Date date;
     private SimpleDateFormat format;
 
-    public Transaction(long clientId, int amount, float price, Type transactionType) {
+    public Transaction(long clientId, int amount, String ticker, float price, Type transactionType) {
         this.clientId = clientId;
         this.amount = amount;
+        this.ticker = ticker;
         this.price = price;
         this.transactionType = transactionType;
         this.date = new Date(System.currentTimeMillis());

@@ -2,74 +2,40 @@ package com.stock.entities;
 
 import com.stock.miscellaneous.Type;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Client implements Runnable{
     private long ClientID; // Client will have a unique id
     protected Type clientType; // buyer or seller
+    protected StockMarket stockMarket;
+    protected HashMap<String,Integer> clientOffers;
 
 
-    public Client(long clientId, Type clientType) {
+    public Client(long clientId, Type clientType, StockMarket stockMarket, HashMap<String,Integer> clientOffers) {
         System.out.println("New client created :" + clientId);
         this.ClientID = clientId;
         this.clientType = clientType;
+        this.stockMarket = stockMarket;
+        this.clientOffers = clientOffers;
     }
 
     @Override
     public void run() {
+        int i=0;
         boolean end = false;
         String command;
         while (!end) {
-           /* try {
-                command = readInput();
-                if (command == null) {
-                    closeConnection();
-                    break;
-                }
-                String name;
-                switch (command) {
-                    case "end":
-                        closeConnection();
-                        end = true;
-                        break;
-                    case "offer":
-                        name = readInput();
-                        int amount = Integer.parseInt(readInput());
-                        float price = Float.parseFloat(readInput());
+            if(clientType == Type.BUYER){
 
-                        if (name.contains("index")) {
-                            String[] split = name.split(" index ");
-                            int index = Integer.parseInt(split[1]);
-                            name = split[0];
-                            if( removeTransaction(transactionHistory.get(index))) {
-                                transactionHistory.remove(index);
-                                doTransaction(new Transaction(name, amount, price, clientType));
-                            }
-                        } else
-                            doTransaction(new Transaction(name, amount, price, clientType));
-                        break;
-                    case "Transactions":
-                        sendList(stockMarket.getTerminated());
-                        break;
-                    case "Sell offers":
-                        sendList(stockMarket.getSellOffers());
-                        break;
-                    case "Buy offers":
-                        sendList(stockMarket.getBuyRequests());
-                        break;
-                    case "All offers":
-                        sendList(stockMarket.getAllOffers());
-                        break;
-                    case  "My offers":
-                        transactionHistory.removeIf(transaction -> transaction.getAmount() == 0);
-                        sendList(transactionHistory);
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+            }
+            else{
+
+            }
+            i++;
         }
     }
+
 
     private void sendList(List list) {
 //        writer.println(list.size());

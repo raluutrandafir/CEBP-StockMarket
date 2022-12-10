@@ -8,14 +8,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StockMarket {
     private ConcurrentHashMap<Client, Thread> clientList;
+    private List<String> stocks;
     private ProtectedList<Transaction> sellOffers;
     private ProtectedList<Transaction> buyRequests;
     private ProtectedList<Transaction> terminatedTransactions;
 
-    public StockMarket() {
+    public StockMarket(List<String> stocks) {
         sellOffers = new ProtectedList<>();
         buyRequests = new ProtectedList<>();
         terminatedTransactions = new ProtectedList<>();
+        this.stocks = stocks;
     }
 
     public List<Transaction> getSellOffers() {
