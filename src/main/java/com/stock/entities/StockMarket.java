@@ -7,12 +7,12 @@ import java.util.List;
 public class StockMarket {
     private ProtectedList<Transaction> sellOffers;
     private ProtectedList<Transaction> buyRequests;
-    private ProtectedList<Transaction> terminated;
+    private ProtectedList<Transaction> terminatedTransactions;
 
     public StockMarket() {
         sellOffers = new ProtectedList<>();
         buyRequests = new ProtectedList<>();
-        terminated = new ProtectedList<>();
+        terminatedTransactions = new ProtectedList<>();
     }
 
     public List<Transaction> getSellOffers() {
@@ -30,7 +30,7 @@ public class StockMarket {
     }
 
     public List<Transaction> getTerminated() {
-        return terminated.getList();
+        return terminatedTransactions.getList();
     }
 
     public void addSellOffer(Transaction t) {
@@ -52,6 +52,7 @@ public class StockMarket {
     }
 
     public Transaction getSellOffer(float price) {
+
         return getOffer(price, sellOffers.getList());
     }
 
@@ -67,7 +68,8 @@ public class StockMarket {
         return null;
     }
 
-    public Transaction doTransaction(Transaction sell, Transaction buy) {
+    public Transaction createTransaction(Transaction sell, Transaction buy) {
+
         return new Transaction(sell, buy);
     }
 
@@ -76,7 +78,7 @@ public class StockMarket {
             return false;
         sellOffers.remove(sell);
         buyRequests.remove(buy);
-        terminated.add(t);
+        terminatedTransactions.add(t);
         return true;
     }
 

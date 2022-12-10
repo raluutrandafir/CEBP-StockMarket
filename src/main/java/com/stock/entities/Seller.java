@@ -8,14 +8,14 @@ import java.util.List;
 import static com.stock.miscellaneous.Type.SELLER;
 
 public class Seller extends Client {
-    @Override
-    protected boolean removeTransaction(Transaction myTransaction) {
-        return stockMarket.removeSellOffer(myTransaction);
-    }
-
     public  Seller(Socket socket, BufferedReader in) throws IOException {
         super(socket, in);
         this.type = SELLER;
+    }
+
+    @Override
+    protected boolean removeTransaction(Transaction myTransaction) {
+        return stockMarket.removeSellOffer(myTransaction);
     }
 
     @Override

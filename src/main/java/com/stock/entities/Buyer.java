@@ -8,6 +8,7 @@ import java.util.List;
 import static com.stock.miscellaneous.Type.BUYER;
 
 public class Buyer extends Client{
+
     public Buyer(Socket socket, BufferedReader in) throws IOException {
         super(socket, in);
         this.type = BUYER;
@@ -30,10 +31,10 @@ public class Buyer extends Client{
         boolean searching = true;
         Transaction sell;
 
-        while ( (sell = stockMarket.getSellOffer(buy.getPrice())) != null && searching)
-            searching = isSearching(sell, buy);
+        while ( (sell = stockMarket.getSellOffer(buy.getPrice())) != null && searching) // while the market is searching for an offer to match and the price of the buf request exists
+            searching = isSearching(sell, buy); //keep updating the searching status
 
-        if (!searching)
+        if (!searching) // if the search status changed to false, the transaction gets removed from the client's personal transaction history
             transactionHistory.remove(buy);
     }
 }

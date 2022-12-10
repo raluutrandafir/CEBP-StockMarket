@@ -1,28 +1,32 @@
 package com.stock.entities;
 
+import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Client implements Runnable{
-    private Socket socket;
+    //private Socket socket;
+    private String ClientID;
     final static StockMarket stockMarket = new StockMarket();
-    private BufferedReader input;
-//    private PrintWriter writer;
-    protected Type type; // buyer or seller
+ //   private BufferedReader input;
+ //    private PrintWriter writer;
+    protected Type clientType; // buyer or seller
     protected ArrayList<Transaction> transactionHistory;
+    private ProtectedList<Transaction> pendingOffers;
 
     public Client(Socket socket, BufferedReader input) throws IOException {
         System.out.println("New client created :)");
-        this.socket = socket;
-        this.input = input;
+      //  this.socket = socket;
+       // this.input = input;
 //        this.writer = new PrintWriter(socket.getOutputStream(), true);
+       // this.ClientID = ClientID;
         this.transactionHistory = new ArrayList<>();
+        this.pendingOffers = new ProtectedList<>();
     }
 
     @Override
@@ -30,7 +34,7 @@ public abstract class Client implements Runnable{
         boolean end = false;
         String command;
         while (!end) {
-            try {
+           /* try {
                 command = readInput();
                 if (command == null) {
                     closeConnection();
@@ -53,10 +57,10 @@ public abstract class Client implements Runnable{
                             name = split[0];
                             if( removeTransaction(transactionHistory.get(index))) {
                                 transactionHistory.remove(index);
-                                doTransaction(new Transaction(name, amount, price, type));
+                                doTransaction(new Transaction(name, amount, price, clientType));
                             }
                         } else
-                            doTransaction(new Transaction(name, amount, price, type));
+                            doTransaction(new Transaction(name, amount, price, clientType));
                         break;
                     case "Transactions":
                         sendList(stockMarket.getTerminated());
@@ -77,13 +81,13 @@ public abstract class Client implements Runnable{
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 
     public boolean isSearching(Transaction sell, Transaction buy) {
-        // make the transaction
-        Transaction transaction = stockMarket.doTransaction(sell, buy);
+        // creates a transaction
+        Transaction transaction = stockMarket.createTransaction(sell, buy);
 
         // if the transaction is finished successfully
         if (stockMarket.finishTransaction(transaction, sell, buy)) {
@@ -91,9 +95,11 @@ public abstract class Client implements Runnable{
             sell.setAmount(sell.getAmount() - transaction.getAmount());
             buy.setAmount(buy.getAmount() - transaction.getAmount());
 
-            // ??????
+            //if there are still money left from the previous sell offer, adjust the amount and add the offer again
             if (sell.getAmount() > 0)
                 stockMarket.addSellOffer(sell);
+
+            //if there are still money left from the previous buy offer, adjust the amount and add the offer again
             if (buy.getAmount() > 0)
                 stockMarket.addBuyRequest(buy);
             return false;
@@ -103,17 +109,17 @@ public abstract class Client implements Runnable{
 
     // Close the Socket connection
     private void closeConnection() throws IOException {
-        removeTransactions(transactionHistory);
-        transactionHistory.clear();
-        input.close();
+      //  removeTransactions(transactionHistory);
+      //  transactionHistory.clear();
+       // input.close();
 //        writer.close();
-        socket.close();
+   //     socket.close();
     }
 
     // Read from the keyboard
-    private String readInput() throws IOException {
-        return input.readLine();
-    }
+   // private String readInput() throws IOException {
+     //   return input.readLine();
+  //  }
 
     private void sendList(List list) {
 //        writer.println(list.size());

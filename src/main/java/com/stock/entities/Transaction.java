@@ -54,11 +54,4 @@ public class Transaction {
         return clientName + " " + transactionType + delimiter + amount + " stocks for " + price +
                 " per stock. Started date: " + format.format(date);
     }
-
-    private void adjustMoney(){ // adjust money of the buyer's/seller's according to what is bought or sold
-    }
-
-    private void adjustShares(){ // adjust amount of shares of the buyer's/seller's according to what is bought or sold
-    }
-
 }
