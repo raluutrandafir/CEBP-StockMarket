@@ -1,8 +1,7 @@
 package com.stock;
 
-import com.stock.entities.Buyer;
 import com.stock.entities.Client;
-import com.stock.entities.Seller;
+import com.stock.miscellaneous.Type;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -43,9 +42,10 @@ public class App {
 
         System.out.println(client);
         if (clientType.equals("Seller"))
-            return new Seller(client, input);
+            return new Client(1, Type.SELLER) {
+            };
         else if (clientType.equals("Buyer"))
-            return new Buyer(client, input);
+            return new Client(2, Type.BUYER);
 
         return null;
     }

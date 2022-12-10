@@ -6,16 +6,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Transaction {
-    private String clientName;
-    private String secondClient = null;
+    private long clientId;
+    private long secondClient = -1;
     private int amount;
     private float price;
     private Type transactionType;
     private Date date;
     private SimpleDateFormat format;
 
-    public Transaction(String clientName, int amount, float price, Type transactionType) {
-        this.clientName = clientName;
+    public Transaction(long clientId, int amount, float price, Type transactionType) {
+        this.clientId = clientId;
         this.amount = amount;
         this.price = price;
         this.transactionType = transactionType;
@@ -24,8 +24,8 @@ public class Transaction {
     }
 
     public Transaction(Transaction sell, Transaction buy){
-        this.clientName = sell.clientName;
-        this.secondClient = buy.clientName;
+        this.clientId = sell.clientId;
+        this.secondClient = buy.clientId;
         this.price = sell.price;
         this.amount = Math.min(sell.amount, buy.amount);
         this.transactionType = Type.SELLER;
@@ -48,10 +48,10 @@ public class Transaction {
     @Override
     public String toString() {
         StringBuilder delimiter = new StringBuilder(" ");
-        if (secondClient != null)
+        if (secondClient != -1)
             delimiter.append(secondClient).append(" ");
 
-        return clientName + " " + transactionType + delimiter + amount + " stocks for " + price +
+        return clientId + " " + transactionType + delimiter + amount + " stocks for " + price +
                 " per stock. Started date: " + format.format(date);
     }
 }

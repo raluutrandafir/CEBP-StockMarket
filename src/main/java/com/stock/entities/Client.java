@@ -1,32 +1,18 @@
 package com.stock.entities;
 
-import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Client implements Runnable{
-    //private Socket socket;
-    private String ClientID;
-    final static StockMarket stockMarket = new StockMarket();
- //   private BufferedReader input;
- //    private PrintWriter writer;
+public class Client implements Runnable{
+    private long ClientID; // Client will have a unique id
     protected Type clientType; // buyer or seller
-    protected ArrayList<Transaction> transactionHistory;
-    private ProtectedList<Transaction> pendingOffers;
 
-    public Client(Socket socket, BufferedReader input) throws IOException {
-        System.out.println("New client created :)");
-      //  this.socket = socket;
-       // this.input = input;
-//        this.writer = new PrintWriter(socket.getOutputStream(), true);
-       // this.ClientID = ClientID;
-        this.transactionHistory = new ArrayList<>();
-        this.pendingOffers = new ProtectedList<>();
+
+    public Client(long clientId, Type clientType) {
+        System.out.println("New client created :" + clientId);
+        this.ClientID = clientId;
+        this.clientType = clientType;
     }
 
     @Override
@@ -85,42 +71,6 @@ public abstract class Client implements Runnable{
         }
     }
 
-    public boolean isSearching(Transaction sell, Transaction buy) {
-        // creates a transaction
-        Transaction transaction = stockMarket.createTransaction(sell, buy);
-
-        // if the transaction is finished successfully
-        if (stockMarket.finishTransaction(transaction, sell, buy)) {
-            // adjust the money/stock amount for both clients
-            sell.setAmount(sell.getAmount() - transaction.getAmount());
-            buy.setAmount(buy.getAmount() - transaction.getAmount());
-
-            //if there are still money left from the previous sell offer, adjust the amount and add the offer again
-            if (sell.getAmount() > 0)
-                stockMarket.addSellOffer(sell);
-
-            //if there are still money left from the previous buy offer, adjust the amount and add the offer again
-            if (buy.getAmount() > 0)
-                stockMarket.addBuyRequest(buy);
-            return false;
-        }
-        return true;
-    }
-
-    // Close the Socket connection
-    private void closeConnection() throws IOException {
-      //  removeTransactions(transactionHistory);
-      //  transactionHistory.clear();
-       // input.close();
-//        writer.close();
-   //     socket.close();
-    }
-
-    // Read from the keyboard
-   // private String readInput() throws IOException {
-     //   return input.readLine();
-  //  }
-
     private void sendList(List list) {
 //        writer.println(list.size());
         System.out.println(list.size());
@@ -129,10 +79,4 @@ public abstract class Client implements Runnable{
             System.out.println(o.toString());
         }
     }
-
-    protected abstract void doTransaction(Transaction t);
-
-    protected abstract void removeTransactions(List<Transaction> myTransactions);
-
-    protected abstract boolean removeTransaction(Transaction myTransaction);
 }
