@@ -10,7 +10,7 @@ import static com.stock.miscellaneous.Type.SELLER;
 public class Seller extends Client {
     public  Seller(Socket socket, BufferedReader in) throws IOException {
         super(socket, in);
-        this.type = SELLER;
+        this.clientType = SELLER;
     }
 
     @Override

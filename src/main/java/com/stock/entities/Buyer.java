@@ -11,7 +11,7 @@ public class Buyer extends Client{
 
     public Buyer(Socket socket, BufferedReader in) throws IOException {
         super(socket, in);
-        this.type = BUYER;
+        this.clientType = BUYER;
     }
     @Override
     protected boolean removeTransaction(Transaction myTransaction) {
