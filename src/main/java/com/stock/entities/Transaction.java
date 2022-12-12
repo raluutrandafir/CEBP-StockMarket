@@ -10,12 +10,12 @@ public class Transaction {
     private long secondClient = -1;
     private int amount;
     private String ticker;
-    private float price;
+    private double price;
     private Type transactionType;
     private Date date;
     private SimpleDateFormat format;
 
-    public Transaction(long clientId, int amount, String ticker, float price, Type transactionType) {
+    public Transaction(long clientId, int amount, String ticker, double price, Type transactionType) {
         this.clientId = clientId;
         this.amount = amount;
         this.ticker = ticker;
@@ -43,7 +43,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 

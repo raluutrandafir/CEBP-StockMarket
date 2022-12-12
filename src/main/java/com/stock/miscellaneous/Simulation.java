@@ -3,6 +3,7 @@ package com.stock.miscellaneous;
 import com.stock.entities.Client;
 import com.stock.entities.StockMarket;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,16 +19,21 @@ public class Simulation implements Runnable{
     private List<Integer> clientIDs;
     private boolean output;
     private List<Map<String,Integer>> ownedStocks;
-    private List<HashMap<String,Integer>> clientOffers;
+    private HashMap<String, Double>  stock_and_price;
+    private ArrayList<ArrayList<Integer>> amounts;
+    private ArrayList<ArrayList<String>> tickers;
     protected StockMarket stockMarket;
 
-    public Simulation(int client, int stock, long timer, List<String> stockIDs, List<Integer> clientIDs,List<Map<String,Integer>> ownedStocks, List<HashMap<String,Integer>> clientOffers, boolean output, StockMarket stockMarket) {
+    //new Simulation(8, 3, 10L, stocks, clients, os, amounts, tickers, true, stockMarket);
+    public Simulation(int client, int stock, long timer, /*List<String> */ HashMap<String, Double> stockIDs, List<Integer> clientIDs, List<Map<String,Integer>> ownedStocks, ArrayList<ArrayList<Integer>> amounts, ArrayList<ArrayList<String>> tickers, boolean output, StockMarket stockMarket) {
         this.client = client;
         this.stock = stock;
         this.timer = timer;
+        this.stock_and_price = stockIDs;
         this.clientIDs = clientIDs;
         this.ownedStocks = ownedStocks;
-        this.clientOffers = clientOffers;
+        this.amounts = amounts;
+        this.tickers = tickers;
         this.output = output;
         this.stockMarket = stockMarket;
     }
@@ -41,12 +47,13 @@ public class Simulation implements Runnable{
 
 
         for (int i = 0; i < client; i++) {
+
             // if the client has stocks he becomes a seller type client otherwise he is a buyer
             if(ownedStocks.get(i).isEmpty()){
-                client_array[i] = new Client(clientIDs.get(i), BUYER, stockMarket, clientOffers.get(i));
+                client_array[i] = new Client(clientIDs.get(i), BUYER, stockMarket, amounts.get(i), tickers.get(i));
             }
             else{
-                client_array[i] = new Client(clientIDs.get(i), SELLER, stockMarket, clientOffers.get(i));
+                client_array[i] = new Client(clientIDs.get(i), SELLER, stockMarket, amounts.get(i), tickers.get(i));
             }
 
             client_threads[i] = new Thread(client_array[i]);

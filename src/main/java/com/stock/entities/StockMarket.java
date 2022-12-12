@@ -3,12 +3,14 @@ package com.stock.entities;
 import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class StockMarket {
     private ConcurrentHashMap<Client, Thread> clientList;
-    private List<String> stocks;
+   // private List<String> stocks;
+    private HashMap<String, Double> stocks;
     private ProtectedList<Transaction> sellOffers;
     private ProtectedList<Transaction> buyRequests;
     private ProtectedList<Transaction> terminatedTransactions;
@@ -17,7 +19,18 @@ public class StockMarket {
         sellOffers = new ProtectedList<>();
         buyRequests = new ProtectedList<>();
         terminatedTransactions = new ProtectedList<>();
+        //this.stocks = stocks;
+    }
+
+    public StockMarket(HashMap<String, Double> stocks) {
+        sellOffers = new ProtectedList<>();
+        buyRequests = new ProtectedList<>();
+        terminatedTransactions = new ProtectedList<>();
         this.stocks = stocks;
+    }
+
+    public HashMap<String, Double> getStocks() {
+        return stocks;
     }
 
     public List<Transaction> getSellOffers() {
@@ -46,16 +59,16 @@ public class StockMarket {
         buyRequests.add(t);
     }
 
-    public Transaction getSellOffer(float price) {
+    public Transaction getSellOffer(double price) {
 
         return getOffer(price, sellOffers.getList());
     }
 
-    public Transaction getBuyOffer(float price) {
+    public Transaction getBuyOffer(double price) {
         return getOffer(price, buyRequests.getList());
     }
 
-    private Transaction getOffer(float price, List<Transaction> offers) {
+    private Transaction getOffer(double price, List<Transaction> offers) {
         for (Transaction offer : offers) {
             if (offer.getPrice() == price)
                 return offer;
