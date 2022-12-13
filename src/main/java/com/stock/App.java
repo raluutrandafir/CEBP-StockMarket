@@ -3,6 +3,7 @@ package com.stock;
 import com.stock.entities.Buyer;
 import com.stock.entities.Client;
 import com.stock.entities.Seller;
+import com.stock.miscellaneous.RabbitMQSender;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -12,7 +13,9 @@ import java.net.UnknownHostException;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        try(ServerSocket serverSocket = new ServerSocket(5000)) {
+        RabbitMQSender.sendHelloMessage("this is a random message");
+
+        /*try(ServerSocket serverSocket = new ServerSocket(5000)) {
             //noinspection InfiniteLoopStatement
             while(true) {
                 // opening new Socket mock Client
@@ -34,7 +37,7 @@ public class App {
             }
         } catch(IOException e) {
             System.out.println("Server exception " + e.getMessage());
-        }
+        }*/
     }
 
     private static Client getClient(Socket client, String clientType) throws Exception {
