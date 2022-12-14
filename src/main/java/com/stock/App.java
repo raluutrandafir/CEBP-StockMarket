@@ -81,8 +81,8 @@ public class App {
 
         c2_amounts.add(5);
         c2_amounts.add(2);
-        c2_stocks.add("AAPL");
-        c2_stocks.add("MCD");
+        c2_stocks.add("SBUX");
+        c2_stocks.add("SBUX");
 
         c3_amounts.add(7);
         c3_amounts.add(5);
@@ -95,7 +95,7 @@ public class App {
         c4_amounts.add(3);
         c4_amounts.add(1);
         c4_stocks.add("AAPL");
-        c4_stocks.add("MCS");
+        c4_stocks.add("MCD");
         c4_stocks.add("MCD");
 
         c5_amounts.add(5);
@@ -103,28 +103,22 @@ public class App {
         c5_amounts.add(1);
         c5_stocks.add("AAPL");
         c5_stocks.add("AAPL");
-        c5_stocks.add("MCD");
+        c5_stocks.add("SBUX");
 
-        c6_amounts.add(5);
-        c6_amounts.add(2);
-        c6_amounts.add(1);
+        c6_amounts.add(10);
+        c6_amounts.add(7);
         c6_stocks.add("AAPL");
         c6_stocks.add("AAPL");
-        c6_stocks.add("MCD");
 
         c7_amounts.add(5);
         c7_amounts.add(2);
         c7_amounts.add(1);
-        c7_stocks.add("AAPL");
-        c7_stocks.add("AAPL");
         c7_stocks.add("MCD");
+        c7_stocks.add("SBUX");
+        c7_stocks.add("SBUX");
 
-        c8_amounts.add(5);
-        c8_amounts.add(2);
-        c8_amounts.add(1);
-        c8_stocks.add("AAPL");
-        c8_stocks.add("AAPL");
-        c8_stocks.add("MCD");
+        c8_amounts.add(4);
+        c8_stocks.add("SBUX");
 
         os.add(c1);
         os.add(c2);

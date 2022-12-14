@@ -6,8 +6,9 @@ import com.stock.miscellaneous.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
-public class StockMarket {
+public class StockMarket implements Runnable{
     private ConcurrentHashMap<Client, Thread> clientList;
    // private List<String> stocks;
     private HashMap<String, Double> stocks;
@@ -145,6 +146,18 @@ public class StockMarket {
 
             if (!searching)
                 terminatedTransactions.remove(transaction);
+        }
+    }
+
+    @Override
+    public void run() {
+        while(true){
+            System.out.println(terminatedTransactions);
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

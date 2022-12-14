@@ -24,7 +24,6 @@ public class Simulation implements Runnable{
     private ArrayList<ArrayList<String>> tickers;
     protected StockMarket stockMarket;
 
-    //new Simulation(8, 3, 10L, stocks, clients, os, amounts, tickers, true, stockMarket);
     public Simulation(int client, int stock, long timer, /*List<String> */ HashMap<String, Double> stockIDs, List<Integer> clientIDs, List<Map<String,Integer>> ownedStocks, ArrayList<ArrayList<Integer>> amounts, ArrayList<ArrayList<String>> tickers, boolean output, StockMarket stockMarket) {
         this.client = client;
         this.stock = stock;
@@ -44,6 +43,7 @@ public class Simulation implements Runnable{
         Client[] client_array = new Client[client];
         Thread[] client_threads = new Thread[client];
         Thread[] stock_threads = new Thread[stock];
+        Thread terminated_transactions_thread= new Thread();
 
 
         for (int i = 0; i < client; i++) {
@@ -85,6 +85,12 @@ public class Simulation implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        try {
+            terminated_transactions_thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
 //        if(output)
