@@ -152,6 +152,7 @@ public class StockMarket implements Runnable{
     @Override
     public void run() {
         while(true){
+
             System.out.println(terminatedTransactions);
             try {
                 TimeUnit.SECONDS.sleep(10);

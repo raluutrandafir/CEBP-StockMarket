@@ -42,8 +42,10 @@ public class Simulation implements Runnable{
 
         Client[] client_array = new Client[client];
         Thread[] client_threads = new Thread[client];
-        Thread[] stock_threads = new Thread[stock];
-        Thread terminated_transactions_thread= new Thread();
+//        Thread[] stock_threads = new Thread[stock];
+        Thread terminated_transactions_thread= new Thread(stockMarket);
+        terminated_transactions_thread.start();
+
 
 
         for (int i = 0; i < client; i++) {

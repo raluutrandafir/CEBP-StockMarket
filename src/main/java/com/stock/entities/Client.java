@@ -36,7 +36,7 @@ public class Client implements Runnable{
                     String name = tickers.get(i);
                     int amount = amounts.get(i);
                     double price = stockMarket.getStocks().get(name);
-                    System.out.println("\nTicker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " + clientId);
+//                    System.out.println("\nTicker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " + clientId);
 
                         if( stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType))) {
                             stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
@@ -45,7 +45,7 @@ public class Client implements Runnable{
                     String name = tickers.get(i);
                     int amount = amounts.get(i);
                     double price = stockMarket.getStocks().get(name);
-                    System.out.println("\nTicker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " + clientId);
+//                    System.out.println("\nTicker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " + clientId);
 
                         if( stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType))) {
                             stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
