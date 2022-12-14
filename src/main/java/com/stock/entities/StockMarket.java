@@ -153,7 +153,7 @@ public class StockMarket implements Runnable{
     public void run() {
         while(true){
 
-            System.out.println(terminatedTransactions);
+            System.out.println(terminatedTransactions.getList());
             try {
                 TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
