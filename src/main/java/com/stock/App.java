@@ -3,17 +3,15 @@ package com.stock;
 import com.stock.entities.Buyer;
 import com.stock.entities.Client;
 import com.stock.entities.Seller;
-import com.stock.miscellaneous.RabbitMQSender;
+import com.stock.miscellaneous.MessageSender;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
-        RabbitMQSender.sendHelloMessage("this is a random message");
+        MessageSender.sendHelloMessage("this is a random message");
 
         /*try(ServerSocket serverSocket = new ServerSocket(5000)) {
             //noinspection InfiniteLoopStatement

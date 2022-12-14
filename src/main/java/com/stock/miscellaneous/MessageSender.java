@@ -4,7 +4,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
-public class RabbitMQSender {
+public class MessageSender {
 
     public static void sendHelloMessage(String message){
         String QUEUE_NAME = "hello";
