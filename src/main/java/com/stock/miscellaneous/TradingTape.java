@@ -5,6 +5,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TradingTape {
 
@@ -24,7 +26,8 @@ public class TradingTape {
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
     public static void main(String[] argv) throws Exception {
-        String  queueName = "hello";
+        /*String  queueName = "hello";
+
         Thread t = new Thread(()->{
         try {
             listenToQueue(queueName);
@@ -33,7 +36,19 @@ public class TradingTape {
         }
         });
 
-        t.start();
+        t.start();*/
+        ArrayList<String> queueNames = new ArrayList<>(Arrays.asList("hello", "general"));
+        for(String queueName : queueNames)
+        {
+            Thread t = new Thread(() -> {
+                try {
+                    listenToQueue(queueName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            t.start();
+        }
     }
 }
 

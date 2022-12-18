@@ -45,7 +45,7 @@ public class Simulation implements Runnable{
         Thread[] stock_threads = new Thread[stock];
         Thread terminated_transactions_thread= new Thread();
 
-
+        MessageSender.sendGeneralMessages("simulation started");
         for (int i = 0; i < client; i++) {
 
             // if the client has stocks he becomes a seller type client otherwise he is a buyer
@@ -72,7 +72,7 @@ public class Simulation implements Runnable{
         }
 
         //map client
-        //initializare cu id 
+        //initializare cu id
 
 
 //        for (Client c : client_array) {

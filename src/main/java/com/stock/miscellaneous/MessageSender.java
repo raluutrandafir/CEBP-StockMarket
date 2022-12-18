@@ -10,6 +10,11 @@ public class MessageSender {
         String QUEUE_NAME = "hello";
         SendMessage(QUEUE_NAME, message);
     }
+    public static void sendGeneralMessages(String message){
+        String QUEUE_NAME = "general";
+        SendMessage(QUEUE_NAME, message);
+    }
+
     private static void SendMessage(String queueName, String payload) {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
