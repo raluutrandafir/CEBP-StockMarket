@@ -15,7 +15,7 @@ public class App {
     private static StockMarket stockMarket;
 
     public static void main(String[] args) throws Exception {
-        MessageSender.sendHelloMessage("this is a random message");
+        //MessageSender.sendHelloMessage("this is a random message");
 
         HashMap<String, Double> stocks = new HashMap<>();
         List<Integer> clients = new ArrayList<>();
@@ -151,7 +151,8 @@ public class App {
         amounts.add(c7_amounts);
         amounts.add(c8_amounts);
 
-        Simulation sim = new Simulation(8, 3, 10L, stocks, clients, os, amounts, tickers, true, stockMarket);
+
+        Simulation sim = new Simulation(8, 3, 1L, stocks, clients, os, amounts, tickers, true, stockMarket);
 
         Thread tsim = new Thread(sim);
 

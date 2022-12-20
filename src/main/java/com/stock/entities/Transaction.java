@@ -4,6 +4,7 @@ import com.stock.miscellaneous.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Transaction {
     private long clientId;
@@ -33,6 +34,7 @@ public class Transaction {
         this.transactionType = Type.SELLER;
         this.date = new Date(System.currentTimeMillis());
         this.format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        this.ticker = sell.ticker;
     }
 
     public int getAmount() {
@@ -50,10 +52,17 @@ public class Transaction {
     @Override
     public String toString() {
         StringBuilder delimiter = new StringBuilder(" ");
-        if (secondClient != -1)
-            delimiter.append(secondClient).append(" ");
+        String typeOfTransaction = "";
+        if(transactionType == Type.BUYER)
+            typeOfTransaction += "buy";
+        else
+            typeOfTransaction +="sell";
 
-        return clientId + " " + transactionType + delimiter + amount + " stocks for " + price +
-                " per stock. Started date: " + format.format(date);
+        if (secondClient != -1)
+            return "Terminated transaction: " + "Transaction happend between : client "+ clientId + " and client "+ secondClient +" for stock: " + ticker +  ". Amount sold: " + amount + " for " + price +
+                    " per stock. Date: " + format.format(date) + "\n";
+
+        return typeOfTransaction.toUpperCase() + " Transaction: client "+ clientId + " decided to " + typeOfTransaction  +" stock: " + ticker +  " stock amount: " +amount + " for " + price +
+                " per stock. Date: " + format.format(date) + "\n";
     }
 }

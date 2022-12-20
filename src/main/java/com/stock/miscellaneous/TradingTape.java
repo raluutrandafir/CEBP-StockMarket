@@ -10,6 +10,8 @@ import java.util.Arrays;
 
 public class TradingTape {
 
+    public static ProtectedList transactionHistory = new ProtectedList();
+
     private static void listenToQueue(String queueName) throws Exception{
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -17,27 +19,18 @@ public class TradingTape {
         Channel channel = connection.createChannel();
 
         channel.queueDeclare(queueName, false, false, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println(" [x] Received message'" + message + "'");
+            transactionHistory.add(message);
+            System.out.println(" [x] Received message:\n'" + message + "'");
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }
     public static void main(String[] argv) throws Exception {
-        /*String  queueName = "hello";
-
-        Thread t = new Thread(()->{
-        try {
-            listenToQueue(queueName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        });
-
-        t.start();*/
-        ArrayList<String> queueNames = new ArrayList<>(Arrays.asList("hello", "general"));
+        System.out.println(" [*] Waiting for messages\n");
+        ArrayList<String> queueNames = new ArrayList<>(Arrays.asList("buyRequest", "sellOffer", "terminated"));
         for(String queueName : queueNames)
         {
             Thread t = new Thread(() -> {
