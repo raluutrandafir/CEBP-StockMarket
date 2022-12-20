@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public class StockMarket implements Runnable{
+public class StockMarket {
     private ProtectedList<Client> clientList = new ProtectedList<>();
    // private List<String> stocks;
     private HashMap<String, Double> stocks;
@@ -178,7 +178,7 @@ public class StockMarket implements Runnable{
         //return false;
     }
 
-    @Override
+    /*@Override
     public void run() {
         while(true){
             try {
@@ -187,5 +187,5 @@ public class StockMarket implements Runnable{
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }

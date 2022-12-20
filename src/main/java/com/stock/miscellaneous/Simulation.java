@@ -55,8 +55,8 @@ public class Simulation implements Runnable{
             stockMarket.addClient(client_array[i]);
             client_threads[i] = new Thread(client_array[i]);
         }
-        var market_thread = new Thread(stockMarket);
-        market_thread.start();
+        //var market_thread = new Thread(stockMarket);
+       // market_thread.start();
 
         for (Thread t : client_threads) {
             t.start();
@@ -70,12 +70,12 @@ public class Simulation implements Runnable{
             endTime = System.currentTimeMillis();
         }
 
-
+/*
         try {
             market_thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         for (Thread t : client_threads) {
             try {
                 t.join();

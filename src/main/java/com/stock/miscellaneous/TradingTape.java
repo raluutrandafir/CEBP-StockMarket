@@ -23,7 +23,9 @@ public class TradingTape {
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
-            transactionHistory.add(message);
+            if(queueName == "terminated"){
+                transactionHistory.add(message);
+            }
             System.out.println(" [x] Received message:\n'" + message + "'");
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
