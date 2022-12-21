@@ -46,36 +46,19 @@ public class Simulation implements Runnable{
         for (int i = 0; i < client; i++) {
 
             // if the client has stocks he becomes a seller type client otherwise he is a buyer
-            if(ownedStocks.get(i).isEmpty()){
+            if (ownedStocks.get(i).isEmpty()) {
                 client_array[i] = new Client(clientIDs.get(i), BUYER, stockMarket, amounts.get(i), tickers.get(i));
-            }
-            else{
+            } else {
                 client_array[i] = new Client(clientIDs.get(i), SELLER, stockMarket, amounts.get(i), tickers.get(i));
             }
             stockMarket.addClient(client_array[i]);
             client_threads[i] = new Thread(client_array[i]);
         }
-        //var market_thread = new Thread(stockMarket);
-       // market_thread.start();
-
+        // start threads for each clients
         for (Thread t : client_threads) {
             t.start();
         }
 
-        long startTime = System.currentTimeMillis();
-        long endTime = startTime;
-
-
-        while (endTime - startTime < timer * 1000) {
-            endTime = System.currentTimeMillis();
-        }
-
-/*
-        try {
-            market_thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
         for (Thread t : client_threads) {
             try {
                 t.join();
@@ -84,5 +67,4 @@ public class Simulation implements Runnable{
             }
         }
     }
-
 }

@@ -76,7 +76,7 @@ public class ProtectedList<K> {
 
     public boolean contains(K t) {
         //this.startRead();
-        boolean answer = list.contains(t);
+        boolean answer = unmodifiableList.contains(t);
         //this.endRead();
         return answer;
     }
