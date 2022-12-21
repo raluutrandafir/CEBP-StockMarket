@@ -1,5 +1,6 @@
 package com.stock.entities;
 
+import com.stock.miscellaneous.MessageSender;
 import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
@@ -8,8 +9,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public class StockMarket implements Runnable{
-    private ConcurrentHashMap<Client, Thread> clientList;
+public class StockMarket {
+    private ProtectedList<Client> clientList = new ProtectedList<>();
    // private List<String> stocks;
     private HashMap<String, Double> stocks;
     private ProtectedList<Transaction> sellOffers;
@@ -21,6 +22,9 @@ public class StockMarket implements Runnable{
         buyRequests = new ProtectedList<>();
         terminatedTransactions = new ProtectedList<>();
         //this.stocks = stocks;
+    }
+    public void  addClient(Client client){
+        clientList.add(client);
     }
 
     public StockMarket(HashMap<String, Double> stocks) {
@@ -85,9 +89,19 @@ public class StockMarket implements Runnable{
     public synchronized boolean finishTransaction(Transaction t, Transaction sell, Transaction buy) {
         if (!sellOffers.contains(sell) || !buyRequests.contains(buy))
             return false;
+        if(sell.getAmount() <= 0){
+            sellOffers.remove(sell);
+            return false;
+        }
+        if(buy.getAmount() <= 0){
+            buyRequests.remove(buy);
+            return false;
+        }
+
         sellOffers.remove(sell);
         buyRequests.remove(buy);
         terminatedTransactions.add(t);
+        MessageSender.sendTerminatedTransactionMessages(t);
         return true;
     }
 
@@ -106,14 +120,15 @@ public class StockMarket implements Runnable{
         // if the transaction is finished successfully
         if (this.finishTransaction(transaction, sell, buy)) {
             // adjust the money/stock amount for both clients
-            sell.setAmount(sell.getAmount() - transaction.getAmount());
-            buy.setAmount(buy.getAmount() - transaction.getAmount());
+            var amount = Math.min(sell.getAmount(), buy.getAmount());
+            sell.setAmount(sell.getAmount() - amount);
+            buy.setAmount(buy.getAmount() - amount);
 
-            //if there are still money left from the previous sell offer, adjust the amount and add the offer again
+            //if there are still stocks amount left from the previous sell offer, adjust the amount and add the offer again
             if (sell.getAmount() > 0)
                 this.addSellOffer(sell);
 
-            //if there are still money left from the previous buy offer, adjust the amount and add the offer again
+            //if there are still stocks amount left from the previous buy offer, adjust the amount and add the offer again
             if (buy.getAmount() > 0)
                 this.addBuyRequest(buy);
             return false;
@@ -122,42 +137,55 @@ public class StockMarket implements Runnable{
     }
 
     protected void doTransaction(Transaction transaction, Type clientType){
-        terminatedTransactions.add(transaction);
-
         if( clientType == Type.BUYER ){
+            //System.out.println("buy transaction" + transaction.toString());
             this.addBuyRequest(transaction);
 
             boolean searching = true;
             Transaction sell;
-
+            MessageSender.sendBuyRequest(transaction);
             while ( (sell = this.getSellOffer(transaction.getPrice())) != null && searching) // while the market is searching for an offer to match and the price of the buf request exists
                 searching = this.isSearching(sell, transaction); //keep updating the searching status
 
-            if (!searching) // if the search status changed to false, the transaction gets removed from the client's personal transaction history
-                terminatedTransactions.remove(transaction);
+            //if (!searching){ // if the search status changed to false, the transaction gets removed from the client's personal transaction history
+
+                // terminatedTransactions.(transaction);
+                //return true; //transaction has been made
+               // return;
+                //System.out.println("Terminated transactions: " + getTerminated());
+
+            //}
+
+
         }else if( clientType == Type.SELLER){
+            //System.out.println("sell transaction" + transaction.toString());
             this.addSellOffer(transaction);
 
             boolean searching = true;
             Transaction buy;
-
+            MessageSender.sendSellOffer(transaction);
             while ( (buy = this.getBuyOffer(transaction.getPrice())) != null && searching )
                 searching = this.isSearching(transaction, buy);
 
-            if (!searching)
-                terminatedTransactions.remove(transaction);
+           // if (!searching) {
+                //terminatedTransactions.add(transaction);
+               // return true;
+               // return;
+              //  System.out.println("Terminated transactions: " + getTerminated());
+            //}
         }
+        //System.out.println("Terminated transactions: " + getTerminated());
+        //return false;
     }
 
-    @Override
+    /*@Override
     public void run() {
         while(true){
-            System.out.println(terminatedTransactions);
             try {
                 TimeUnit.SECONDS.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }

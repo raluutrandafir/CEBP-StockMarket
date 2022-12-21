@@ -1,5 +1,6 @@
 package com.stock.entities;
 
+import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ public class Client implements Runnable{
     //protected HashMap<String,Integer> clientOffers;
     private ArrayList<Integer> amounts;
     private ArrayList<String> tickers;
+    private ProtectedList myTransactionHistory = new ProtectedList();
 
     public Client(long clientId, Type clientType, StockMarket stockMarket, ArrayList<Integer> amounts, ArrayList<String> tickers) {
-        System.out.println("New client created: " + clientId);
         this.clientId = clientId;
         this.clientType = clientType;
         this.stockMarket = stockMarket;
@@ -22,6 +23,7 @@ public class Client implements Runnable{
         this.amounts = amounts;
         this.tickers = tickers;
     }
+
 
     @Override
     public void run() {
@@ -36,20 +38,20 @@ public class Client implements Runnable{
                     String name = tickers.get(i);
                     int amount = amounts.get(i);
                     double price = stockMarket.getStocks().get(name);
-                    System.out.println("\nTicker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " + clientId);
-
-                        if( stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType))) {
-                            stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
-                        }
+                    //System.out.println("\n" +"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
+                    stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
+                       // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType)) {
+                          //  stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType));
+                        //}
                 }else{
                     String name = tickers.get(i);
                     int amount = amounts.get(i);
                     double price = stockMarket.getStocks().get(name);
-                    System.out.println("\nTicker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " + clientId);
-
-                        if( stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType))) {
-                            stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
-                        }
+                    //System.out.println("\n"+"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
+                    stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
+                       // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType) ) {
+                         //   stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType));
+                       // }
                 }
             }
         }
