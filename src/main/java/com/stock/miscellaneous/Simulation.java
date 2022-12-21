@@ -42,6 +42,7 @@ public class Simulation implements Runnable{
 
         Client[] client_array = new Client[client];
         Thread[] client_threads = new Thread[client];
+        Thread s = new Thread(stockMarket);
 
         for (int i = 0; i < client; i++) {
 
@@ -54,6 +55,7 @@ public class Simulation implements Runnable{
             stockMarket.addClient(client_array[i]);
             client_threads[i] = new Thread(client_array[i]);
         }
+        s.start();
         // start threads for each clients
         for (Thread t : client_threads) {
             t.start();

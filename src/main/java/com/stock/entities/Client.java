@@ -35,25 +35,30 @@ public class Client implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(clientType == Type.BUYER){
-                String name = tickers.get(i);
-                int amount = amounts.get(i);
-                double price = stockMarket.getStocks().get(name);
-                //System.out.println("\n" +"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
-                stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
-                   // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType)) {
-                      //  stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType));
-                    //}
-            }else{
-                String name = tickers.get(i);
-                int amount = amounts.get(i);
-                double price = stockMarket.getStocks().get(name);
-                //System.out.println("\n"+"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
-                stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
-                   // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType) ) {
-                     //   stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType));
-                   // }
-            }
+
+            String name = tickers.get(i);
+            int amount = amounts.get(i);
+            double price = stockMarket.getStocks().get(name);
+            stockMarket.addOffer(new Transaction(clientId, amount, name, price, clientType));
+//            if(clientType == Type.BUYER){
+//                String name = tickers.get(i);
+//                int amount = amounts.get(i);
+//                double price = stockMarket.getStocks().get(name);
+//                //System.out.println("\n" +"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
+//                stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
+//                   // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType)) {
+//                      //  stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType));
+//                    //}
+//            }else{
+//                String name = tickers.get(i);
+//                int amount = amounts.get(i);
+//                double price = stockMarket.getStocks().get(name);
+//                //System.out.println("\n"+"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
+//                stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
+//                   // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType) ) {
+//                     //   stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType));
+//                   // }
+//            }
         }
     }
 }
