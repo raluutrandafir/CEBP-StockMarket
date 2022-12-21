@@ -11,18 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 public class StockMarket {
     private ProtectedList<Client> clientList = new ProtectedList<>();
-   // private List<String> stocks;
     private HashMap<String, Double> stocks;
     private ProtectedList<Transaction> sellOffers;
     private ProtectedList<Transaction> buyRequests;
     private ProtectedList<Transaction> terminatedTransactions;
 
-    public StockMarket(List<String> stocks) {
-        sellOffers = new ProtectedList<>();
-        buyRequests = new ProtectedList<>();
-        terminatedTransactions = new ProtectedList<>();
-        //this.stocks = stocks;
-    }
     public void  addClient(Client client){
         clientList.add(client);
     }
@@ -72,7 +65,7 @@ public class StockMarket {
     public Transaction getBuyOffer(double price) {
         return getOffer(price, buyRequests.getList());
     }
-
+    //search for an offer that matches the price
     private Transaction getOffer(double price, List<Transaction> offers) {
         for (Transaction offer : offers) {
             if (offer.getPrice() == price)
@@ -82,7 +75,6 @@ public class StockMarket {
     }
 
     public Transaction createTransaction(Transaction sell, Transaction buy) {
-
         return new Transaction(sell, buy);
     }
 
@@ -114,7 +106,7 @@ public class StockMarket {
     }
 
     public boolean isSearching(Transaction sell, Transaction buy) {
-        // creates a transaction
+        // creates a match type transaction
         Transaction transaction = this.createTransaction(sell, buy);
 
         // if the transaction is finished successfully
@@ -127,7 +119,6 @@ public class StockMarket {
             //if there are still stocks amount left from the previous sell offer, adjust the amount and add the offer again
             if (sell.getAmount() > 0)
                 this.addSellOffer(sell);
-
             //if there are still stocks amount left from the previous buy offer, adjust the amount and add the offer again
             if (buy.getAmount() > 0)
                 this.addBuyRequest(buy);
@@ -138,54 +129,20 @@ public class StockMarket {
 
     protected void doTransaction(Transaction transaction, Type clientType){
         if( clientType == Type.BUYER ){
-            //System.out.println("buy transaction" + transaction.toString());
             this.addBuyRequest(transaction);
-
             boolean searching = true;
             Transaction sell;
-            MessageSender.sendBuyRequest(transaction);
-            while ( (sell = this.getSellOffer(transaction.getPrice())) != null && searching) // while the market is searching for an offer to match and the price of the buf request exists
+            MessageSender.sendBuyRequest(transaction); // add the transaction user intends to do
+            while ( (sell = this.getSellOffer(transaction.getPrice())) != null && searching) // while the market is searching for an offer to match and the price of the buy request exists
                 searching = this.isSearching(sell, transaction); //keep updating the searching status
 
-            //if (!searching){ // if the search status changed to false, the transaction gets removed from the client's personal transaction history
-
-                // terminatedTransactions.(transaction);
-                //return true; //transaction has been made
-               // return;
-                //System.out.println("Terminated transactions: " + getTerminated());
-
-            //}
-
-
         }else if( clientType == Type.SELLER){
-            //System.out.println("sell transaction" + transaction.toString());
             this.addSellOffer(transaction);
-
             boolean searching = true;
             Transaction buy;
             MessageSender.sendSellOffer(transaction);
             while ( (buy = this.getBuyOffer(transaction.getPrice())) != null && searching )
                 searching = this.isSearching(transaction, buy);
-
-           // if (!searching) {
-                //terminatedTransactions.add(transaction);
-               // return true;
-               // return;
-              //  System.out.println("Terminated transactions: " + getTerminated());
-            //}
         }
-        //System.out.println("Terminated transactions: " + getTerminated());
-        //return false;
     }
-
-    /*@Override
-    public void run() {
-        while(true){
-            try {
-                TimeUnit.SECONDS.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 }

@@ -156,8 +156,10 @@ public class App {
 
         Thread tsim = new Thread(sim);
 
+        // start simulation thread
         tsim.start();
 
         tsim.join();
+
     }
 }

@@ -4,13 +4,16 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
 public class TradingTape {
 
     public static ProtectedList transactionHistory = new ProtectedList();
+    public static Util utilClass = new Util();
 
     private static void listenToQueue(String queueName) throws Exception{
         ConnectionFactory factory = new ConnectionFactory();
@@ -23,10 +26,11 @@ public class TradingTape {
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
+
             if(queueName == "terminated"){
                 transactionHistory.add(message);
             }
-            System.out.println(" [x] Received message:\n'" + message + "'");
+            System.out.println(" [x] Received message:\n'" + message/*utilClass.fromJsonStringToObject(message)*/  + "'");
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }

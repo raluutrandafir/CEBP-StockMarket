@@ -7,17 +7,26 @@ import com.stock.entities.Transaction;
 
 public class MessageSender {
 
+    public static Util utilClass = new Util();
+
     public static void sendBuyRequest(Transaction buy){
         String QUEUE_NAME = "buyRequest";
-        SendMessage(QUEUE_NAME, buy.toString());
+        /*ObjectMapper Obj = new ObjectMapper();
+        try {
+            String jsonStr = Obj.writeValueAsString(buy);
+            SendMessage(QUEUE_NAME, jsonStr);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }*/
+        SendMessage(QUEUE_NAME,buy.toString()/* utilClass.fromObjectToJson(buy)*/);
     }
     public static void sendSellOffer(Transaction sell){
         String QUEUE_NAME = "sellOffer";
-        SendMessage(QUEUE_NAME, sell.toString());
+        SendMessage(QUEUE_NAME, sell.toString()/*utilClass.fromObjectToJson(sell)*/);
     }
     public static void sendTerminatedTransactionMessages(Transaction terminatedTransaction){
         String QUEUE_NAME = "terminated";
-        SendMessage(QUEUE_NAME, terminatedTransaction.toString());
+        SendMessage(QUEUE_NAME, terminatedTransaction.toString()/*utilClass.fromObjectToJson(terminatedTransaction)*/);
     }
 
     private static void SendMessage(String queueName, String payload) {

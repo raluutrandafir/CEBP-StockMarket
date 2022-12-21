@@ -16,6 +16,7 @@ public class Client implements Runnable{
     private ProtectedList myTransactionHistory = new ProtectedList();
 
     public Client(long clientId, Type clientType, StockMarket stockMarket, ArrayList<Integer> amounts, ArrayList<String> tickers) {
+        //System.out.println("New client created: " + clientId);
         this.clientId = clientId;
         this.clientType = clientType;
         this.stockMarket = stockMarket;
@@ -27,32 +28,32 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
-        boolean end = false;
-            for (int i = 0; i < amounts.size(); i++) {
-                try {
-                    TimeUnit.SECONDS.sleep(6);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(clientType == Type.BUYER){
-                    String name = tickers.get(i);
-                    int amount = amounts.get(i);
-                    double price = stockMarket.getStocks().get(name);
-                    //System.out.println("\n" +"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
-                    stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
-                       // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType)) {
-                          //  stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType));
-                        //}
-                }else{
-                    String name = tickers.get(i);
-                    int amount = amounts.get(i);
-                    double price = stockMarket.getStocks().get(name);
-                    //System.out.println("\n"+"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
-                    stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
-                       // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType) ) {
-                         //   stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType));
-                       // }
-                }
+
+        for (int i = 0; i < amounts.size(); i++) {
+            try {
+                TimeUnit.SECONDS.sleep(6);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(clientType == Type.BUYER){
+                String name = tickers.get(i);
+                int amount = amounts.get(i);
+                double price = stockMarket.getStocks().get(name);
+                //System.out.println("\n" +"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
+                stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
+                   // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType)) {
+                      //  stockMarket.removeBuyRequest(new Transaction(clientId, amount, name, price, clientType));
+                    //}
+            }else{
+                String name = tickers.get(i);
+                int amount = amounts.get(i);
+                double price = stockMarket.getStocks().get(name);
+                //System.out.println("\n"+"Client" + clientId + " wants: " + "Ticker: " + name + "; amount: " + amount + "; price: " + price + "; client: " + clientType + " " );
+                stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType);
+                   // if(stockMarket.doTransaction(new Transaction(clientId, amount, name, price, clientType), clientType) ) {
+                     //   stockMarket.removeSellOffer(new Transaction(clientId, amount, name, price, clientType));
+                   // }
             }
         }
+    }
 }
