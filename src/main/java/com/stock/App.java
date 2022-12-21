@@ -2,8 +2,6 @@ package com.stock;
 
 import com.stock.entities.StockMarket;
 import com.stock.miscellaneous.Simulation;
-import com.stock.entities.Client;
-import com.stock.miscellaneous.MessageSender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -160,6 +158,7 @@ public class App {
         tsim.start();
 
         tsim.join();
+
 
     }
 }

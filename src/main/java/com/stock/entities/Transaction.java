@@ -4,7 +4,6 @@ import com.stock.miscellaneous.Type;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Transaction {
     private long clientId;
@@ -44,6 +43,10 @@ public class Transaction {
 
     public int getAmount() {
         return amount;
+    }
+
+    public Type getType(){
+        return transactionType;
     }
 
     public void setAmount(int amount) {

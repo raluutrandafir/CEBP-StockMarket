@@ -4,17 +4,31 @@ import com.stock.miscellaneous.MessageSender;
 import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
-public class StockMarket {
+public class StockMarket  implements Runnable{
     private ProtectedList<Client> clientList = new ProtectedList<>();
     private HashMap<String, Double> stocks;
     private ProtectedList<Transaction> sellOffers;
     private ProtectedList<Transaction> buyRequests;
     private ProtectedList<Transaction> terminatedTransactions;
+    private ArrayList<Transaction> offerList;
+
+    @Override
+    public void run(){
+        while(true) {
+            for (Transaction t : offerList) {
+                doTransaction(t, t.getType());
+            }
+        }
+    }
+
+
+    public void  addOffer(Transaction transaction){
+        offerList.add(transaction);
+    }
 
     public void  addClient(Client client){
         clientList.add(client);
@@ -83,15 +97,19 @@ public class StockMarket {
             return false;
         if(sell.getAmount() <= 0){
             sellOffers.remove(sell);
+            offerList.remove(sell);
             return false;
         }
         if(buy.getAmount() <= 0){
             buyRequests.remove(buy);
+            offerList.remove(buy);
             return false;
         }
 
         sellOffers.remove(sell);
+        offerList.remove(sell);
         buyRequests.remove(buy);
+        offerList.remove(buy);
         terminatedTransactions.add(t);
         MessageSender.sendTerminatedTransactionMessages(t);
         return true;
