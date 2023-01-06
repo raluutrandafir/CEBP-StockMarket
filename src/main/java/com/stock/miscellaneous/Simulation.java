@@ -44,7 +44,6 @@ public class Simulation implements Runnable{
         Thread[] client_threads = new Thread[client];
 
         for (int i = 0; i < client; i++) {
-
             // if the client has stocks he becomes a seller type client otherwise he is a buyer
             if (ownedStocks.get(i).isEmpty()) {
                 client_array[i] = new Client(clientIDs.get(i), BUYER, stockMarket, amounts.get(i), tickers.get(i));

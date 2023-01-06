@@ -15,7 +15,6 @@ public class App {
     private static StockMarket stockMarket;
 
     public static void main(String[] args) throws Exception {
-        //MessageSender.sendHelloMessage("this is a random message");
 
         HashMap<String, Double> stocks = new HashMap<>();
         List<Integer> clients = new ArrayList<>();
