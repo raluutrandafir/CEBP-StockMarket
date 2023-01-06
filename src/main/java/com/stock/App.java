@@ -109,10 +109,10 @@ public class App {
         c5_stocks.add("AAPL");
         c5_stocks.add("SBUX");
 
-        c6_amounts.add(10);
-        c6_amounts.add(7);
+        c6_amounts.add(17);
+        //c6_amounts.add(7);
         c6_stocks.add("AAPL");
-        c6_stocks.add("AAPL");
+        //c6_stocks.add("AAPL");
 
         c7_amounts.add(5);
         c7_amounts.add(2);

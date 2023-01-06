@@ -52,10 +52,10 @@ public class Simulation implements Runnable{
             } else {
                 client_array[i] = new Client(clientIDs.get(i), SELLER, stockMarket, amounts.get(i), tickers.get(i));
             }
-            stockMarket.addClient(client_array[i]);
+           // stockMarket.addClient(client_array[i]);
             client_threads[i] = new Thread(client_array[i]);
         }
-        s.start();
+
         // start threads for each clients
         for (Thread t : client_threads) {
             t.start();
@@ -68,5 +68,6 @@ public class Simulation implements Runnable{
                 e.printStackTrace();
             }
         }
+        s.start();
     }
 }
