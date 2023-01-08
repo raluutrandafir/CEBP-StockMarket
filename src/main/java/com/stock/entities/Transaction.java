@@ -36,14 +36,20 @@ public class Transaction {
         this.ticker = sell.ticker;
     }
 
-    public String getDate(){ return format.format(date) ;}
-    public SimpleDateFormat dateFormat(){ return format;}
-    public long getClientId(){return clientId;}
-    public long getSecondClientId(){return secondClient;}
-    public  String getTicker(){return ticker;}
+    public String getDate(){
+        return format.format(date);
+    }
+    public long getClientId(){
+        return clientId;
+    }
+    public long getSecondClientId(){
+        return secondClient;
+    }
+    public  String getTicker(){
+        return ticker;
+    }
 
-    public int getAmount() {
-        return amount;
+    public int getAmount() { return amount;
     }
 
     public Type getType() {
@@ -61,11 +67,7 @@ public class Transaction {
     @Override
     public String toString() {
         StringBuilder delimiter = new StringBuilder(" ");
-        String typeOfTransaction = "";
-        if(transactionType == Type.BUYER)
-            typeOfTransaction += "buy";
-        else
-            typeOfTransaction +="sell";
+
         //if a second client exists in a transaction, it s a terminated transaction
         if (secondClient != -1)
             return "\"Transaction [ClientId :"+ clientId + ", SecondClientId : " + secondClient + ", amount : " + amount + ", price : " + price + ", ticker : " + ticker + ", date : " + format.format(date) +  "]";
