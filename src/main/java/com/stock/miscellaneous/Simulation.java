@@ -13,15 +13,15 @@ import static com.stock.miscellaneous.Type.SELLER;
 
 public class Simulation implements Runnable{
 
-    private int client;
-    private int stock;
-    private long timer;
-    private List<Integer> clientIDs;
-    private boolean output;
-    private List<Map<String,Integer>> ownedStocks;
-    private HashMap<String, Double>  stock_and_price;
-    private ArrayList<ArrayList<Integer>> amounts;
-    private ArrayList<ArrayList<String>> tickers;
+    private final int client;
+    private final int stock;
+    private final long timer;
+    private final List<Integer> clientIDs;
+    private final boolean output;
+    private final List<Map<String,Integer>> ownedStocks;
+    private final HashMap<String, Double>  stock_and_price;
+    private final ArrayList<ArrayList<Integer>> amounts;
+    private final ArrayList<ArrayList<String>> tickers;
     protected StockMarket stockMarket;
 
     public Simulation(int client, int stock, long timer, /*List<String> */ HashMap<String, Double> stockIDs, List<Integer> clientIDs, List<Map<String,Integer>> ownedStocks, ArrayList<ArrayList<Integer>> amounts, ArrayList<ArrayList<String>> tickers, boolean output, StockMarket stockMarket) {

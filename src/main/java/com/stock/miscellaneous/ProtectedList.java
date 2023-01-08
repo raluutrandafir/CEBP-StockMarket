@@ -10,9 +10,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ProtectedList<K> {
-    private CopyOnWriteArrayList<K> list;
+    private final CopyOnWriteArrayList<K> list;
     private final List<K> unmodifiableList;
-    private volatile int nrReaders = 0;
+    private final int nrReaders = 0;
     //private final Lock  read = new ReentrantLock ();
     //private final Lock  write = new ReentrantLock ();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);

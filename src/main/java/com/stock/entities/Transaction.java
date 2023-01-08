@@ -36,10 +36,11 @@ public class Transaction {
         this.ticker = sell.ticker;
     }
 
-    //empty constructor to be used in the gson responsible class
-    public Transaction() {
-
-    }
+    public String getDate(){ return format.format(date) ;}
+    public SimpleDateFormat dateFormat(){ return format;}
+    public long getClientId(){return clientId;}
+    public long getSecondClientId(){return secondClient;}
+    public  String getTicker(){return ticker;}
 
     public int getAmount() {
         return amount;
@@ -67,17 +68,9 @@ public class Transaction {
             typeOfTransaction +="sell";
         //if a second client exists in a transaction, it s a terminated transaction
         if (secondClient != -1)
-            return "Terminated transaction: " + "Transaction happend between : client "+ clientId + " and client "+ secondClient +" for stock: " + ticker +  ". Amount traded    : " + amount + " for " + price +
-                    " per stock. Date: " + format.format(date) + "\n";
-/*
-            return "\"Transaction [ClientId :"+ clientId + ", SecondClientId : " + secondClient + ", amount : " + amount + ", price : " + price + ", ticker : " + ticker + ", date : " + format.format(date) + ", format : " + format + "]";
-*/
+            return "\"Transaction [ClientId :"+ clientId + ", SecondClientId : " + secondClient + ", amount : " + amount + ", price : " + price + ", ticker : " + ticker + ", date : " + format.format(date) +  "]";
 
         //else it's a buy/sell transaction
-        return typeOfTransaction.toUpperCase() + " Transaction: client "+ clientId + " decided to " + typeOfTransaction  +" stock: " + ticker +  " stock amount: " +amount + " for " + price +
-                " per stock. Date: " + format.format(date) + "\n";
-/*
-        return "\"Transaction [ClientId :"+ clientId + ", TransactionType: " + transactionType + ", amount : " + amount + ", price :" + price + ", ticker : " + ticker + ", date : " + format.format(date) + ", format : " + format + "]";
-*/
+        return "\"Transaction [ClientId :"+ clientId + ", TransactionType: " + transactionType + ", amount : " + amount + ", price :" + price + ", ticker : " + ticker + ", date : " + format.format(date) +  "]";
     }
 }

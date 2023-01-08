@@ -25,12 +25,12 @@ public class TradingTape {
 
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
+            String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
             if(queueName == "terminated"){
-                transactionHistory.add(message);
+                transactionHistory.add(utilClass.fromJsonStringToObject(message));
             }
-            System.out.println(" [x] Received message:\n'" + message/*utilClass.fromJsonStringToObject(message)*/  + "'");
+            System.out.println(" [x] Received message:\n'" + utilClass.fromJsonStringToObject(message)  + "'");
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }

@@ -1,20 +1,22 @@
 package com.stock.entities;
 
+import com.stock.miscellaneous.EventMessage;
 import com.stock.miscellaneous.MessageSender;
 import com.stock.miscellaneous.ProtectedList;
 import com.stock.miscellaneous.Type;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class StockMarket  implements Runnable{
-    private ProtectedList<Client> clientList = new ProtectedList<>();
-    private HashMap<String, Double> stocks;
-    private ProtectedList<Transaction> sellOffers;
-    private ProtectedList<Transaction> buyRequests;
-    private ProtectedList<Transaction> terminatedTransactions;
-    private ProtectedList<Transaction> offerList ;
+    private final ProtectedList<Client> clientList = new ProtectedList<>();
+    private final HashMap<String, Double> stocks;
+    private final ProtectedList<Transaction> sellOffers;
+    private final ProtectedList<Transaction> buyRequests;
+    private final ProtectedList<Transaction> terminatedTransactions;
+    private final ProtectedList<Transaction> offerList ;
 
     @Override
     public void run(){
@@ -23,15 +25,15 @@ public class StockMarket  implements Runnable{
                 if( transaction.getType() == Type.BUYER ){
                     this.addBuyRequest(transaction);
                     Transaction sell;
-                    if ( (sell = this.getSellOffer(transaction.getPrice())) != null && transaction.getAmount() > 0) {// if the market is searching for an offer to match and the price of the buy request exists
-                        this.isSearching(sell, transaction); //keep updating the searching status
+                    if ( (sell = this.getSellOffer(transaction.getPrice())) != null && transaction.getAmount() > 0) {// if the amount is > 0 and the price of the buy request exists
+                        this.tryMatch(sell, transaction);
                     }
 
                 }else if( transaction.getType() == Type.SELLER){
                     this.addSellOffer(transaction);
                     Transaction buy;
                     if ( (buy = this.getBuyOffer(transaction.getPrice())) != null&& transaction.getAmount()>0) {
-                        this.isSearching(transaction, buy);
+                        this.tryMatch(transaction, buy);
                     }
                 }
             }
@@ -121,7 +123,7 @@ public class StockMarket  implements Runnable{
         removeSellOffer(sell);
         removeBuyRequest(buy);
         terminatedTransactions.add(t);
-        MessageSender.sendTerminatedTransactionMessages(t);
+        MessageSender.sendTerminatedTransactionMessages(new EventMessage(t.getClientId(), t.getSecondClientId(), t.getAmount(), t.getTicker(), t.getPrice(), t.getType(), t.getDate()));
         return true;
     }
 
@@ -135,7 +137,7 @@ public class StockMarket  implements Runnable{
          offerList.remove(myTransaction);
     }
 
-    public void isSearching(Transaction sell, Transaction buy) {
+    public void tryMatch(Transaction sell, Transaction buy) {
         // creates a match type transaction
         Transaction transaction = this.createTransaction(sell, buy);
 
@@ -150,13 +152,13 @@ public class StockMarket  implements Runnable{
             if (sell.getAmount() > 0){
                 this.addSellOffer(sell);
                 offerList.add(sell);
-                MessageSender.sendSellOffer(sell);
+                MessageSender.sendSellOffer(new EventMessage(sell.getClientId(), sell.getAmount(), sell.getTicker(), sell.getPrice(), sell.getType(), sell.getDate()));
             }
             //if there are still stocks amount left from the previous buy offer, adjust the amount and add the offer again
             if (buy.getAmount() > 0) {
                 this.addBuyRequest(buy);
                 offerList.add(buy);
-                MessageSender.sendBuyRequest(buy);
+                MessageSender.sendBuyRequest(new EventMessage(buy.getClientId(), buy.getAmount(), buy.getTicker(), buy.getPrice(), buy.getType(), buy.getDate()));
             }
         }
     }
