@@ -1,9 +1,6 @@
 package com.stock.entities;
 
-import com.stock.miscellaneous.EventMessage;
-import com.stock.miscellaneous.MessageSender;
-import com.stock.miscellaneous.ProtectedList;
-import com.stock.miscellaneous.Type;
+import com.stock.miscellaneous.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -123,7 +120,7 @@ public class StockMarket  implements Runnable{
         removeSellOffer(sell);
         removeBuyRequest(buy);
         terminatedTransactions.add(t);
-        MessageSender.sendTerminatedTransactionMessages(new EventMessage(t.getClientId(), t.getSecondClientId(), t.getAmount(), t.getTicker(), t.getPrice(), t.getType(), t.getDate()));
+        MessageSender.sendTerminatedTransactionMessages(new TerminatedEventMessage(t.getClientId(), t.getSecondClientId(), t.getAmount(), t.getTicker(), t.getPrice(), t.getType(), t.getDate()));
         return true;
     }
 
@@ -152,13 +149,13 @@ public class StockMarket  implements Runnable{
             if (sell.getAmount() > 0){
                 this.addSellOffer(sell);
                 offerList.add(sell);
-                MessageSender.sendSellOffer(new EventMessage(sell.getClientId(), sell.getAmount(), sell.getTicker(), sell.getPrice(), sell.getType(), sell.getDate()));
+                MessageSender.sendSellOffer(new SellEventMessage(sell.getClientId(), sell.getAmount(), sell.getTicker(), sell.getPrice(), sell.getType(), sell.getDate()));
             }
             //if there are still stocks amount left from the previous buy offer, adjust the amount and add the offer again
             if (buy.getAmount() > 0) {
                 this.addBuyRequest(buy);
                 offerList.add(buy);
-                MessageSender.sendBuyRequest(new EventMessage(buy.getClientId(), buy.getAmount(), buy.getTicker(), buy.getPrice(), buy.getType(), buy.getDate()));
+                MessageSender.sendBuyRequest(new BuyEventMessage(buy.getClientId(), buy.getAmount(), buy.getTicker(), buy.getPrice(), buy.getType(), buy.getDate()));
             }
         }
     }

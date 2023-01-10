@@ -1,9 +1,6 @@
 package com.stock.entities;
 
-import com.stock.miscellaneous.EventMessage;
-import com.stock.miscellaneous.MessageSender;
-import com.stock.miscellaneous.ProtectedList;
-import com.stock.miscellaneous.Type;
+import com.stock.miscellaneous.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,10 +40,10 @@ public class Client implements Runnable{
             var transaction =new Transaction(clientId, amount, name, price, clientType);
             stockMarket.addOffer(transaction);
             if(clientType == Type.BUYER)
-                MessageSender.sendBuyRequest(new EventMessage(transaction.getClientId(), transaction.getAmount(), transaction.getTicker(), transaction.getPrice(), transaction.getType(), transaction.getDate()));
+                MessageSender.sendBuyRequest(new BuyEventMessage(transaction.getClientId(), transaction.getAmount(), transaction.getTicker(), transaction.getPrice(), transaction.getType(), transaction.getDate()));
             //int amount, String ticker, double price, Type transactionType, Date date, SimpleDateFormat format
             else {
-                MessageSender.sendSellOffer(new EventMessage(transaction.getClientId(), transaction.getAmount(), transaction.getTicker(), transaction.getPrice(), transaction.getType(), transaction.getDate()));
+                MessageSender.sendSellOffer(new SellEventMessage(transaction.getClientId(), transaction.getAmount(), transaction.getTicker(), transaction.getPrice(), transaction.getType(), transaction.getDate()));
             }
         }
     }

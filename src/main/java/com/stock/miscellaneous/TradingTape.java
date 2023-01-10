@@ -23,14 +23,19 @@ public class TradingTape {
 
         channel.queueDeclare(queueName, false, false, false, null);
 
-
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
             if(queueName == "terminated"){
-                transactionHistory.add(utilClass.fromJsonStringToObject(message));
+                transactionHistory.add(utilClass.fromJsonStringToTerminated(message));
+                System.out.println(" [x] Received message:\n'" + utilClass.fromJsonStringToTerminated(message)  + "'");
             }
-            System.out.println(" [x] Received message:\n'" + utilClass.fromJsonStringToObject(message)  + "'");
+            else{
+                if(queueName == "buyRequest")
+                    System.out.println(" [x] Received message:\n'" + utilClass.fromJsonStringToBuy(message)  + "'");
+                else
+                    System.out.println(" [x] Received message:\n'" + utilClass.fromJsonStringToSell(message)  + "'");
+            }
         };
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
     }

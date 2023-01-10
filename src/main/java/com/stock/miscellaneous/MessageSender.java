@@ -8,17 +8,17 @@ public class MessageSender {
 
     public static Util utilClass = new Util();
 
-    public static void sendBuyRequest(EventMessage buy){
+    public static void sendBuyRequest(BuyEventMessage buy){
         String QUEUE_NAME = "buyRequest";
-        SendMessage(QUEUE_NAME, utilClass.fromObjectToJson(buy));
+        SendMessage(QUEUE_NAME, utilClass.fromBuyToJson(buy));
     }
-    public static void sendSellOffer(EventMessage sell){
+    public static void sendSellOffer(SellEventMessage sell){
         String QUEUE_NAME = "sellOffer";
-        SendMessage(QUEUE_NAME, utilClass.fromObjectToJson(sell));
+        SendMessage(QUEUE_NAME, utilClass.fromSellToJson(sell));
     }
-    public static void sendTerminatedTransactionMessages(EventMessage terminatedTransaction){
+    public static void sendTerminatedTransactionMessages(TerminatedEventMessage terminatedTransaction){
         String QUEUE_NAME = "terminated";
-        SendMessage(QUEUE_NAME, utilClass.fromObjectToJson(terminatedTransaction));
+        SendMessage(QUEUE_NAME, utilClass.fromTerminatedToJson(terminatedTransaction));
     }
 
     private static void SendMessage(String queueName, String payload) {

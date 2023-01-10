@@ -5,14 +5,37 @@ import java.util.Date;
 
 public class EventMessage {
     private long clientId;
-    private long secondClient = -1;
+    //private long secondClient = -1;
     private int amount;
     private String ticker;
     private double price;
     private Type transactionType;
     private String date;
 
-    public EventMessage(long clientId, long secondClient, int amount, String ticker, double price, Type transactionType, String date) {
+    public long getClientId() {
+        return clientId;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public String getTicker() {
+        return ticker;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public Type getTransactionType() {
+        return transactionType;
+    }
+
+    public String getDate() {
+        return date;
+    }
+/*public EventMessage(long clientId, long secondClient, int amount, String ticker, double price, Type transactionType, String date) {
         this.clientId = clientId;
         this.secondClient = secondClient;
         this.amount = amount;
@@ -20,7 +43,7 @@ public class EventMessage {
         this.price = price;
         this.transactionType = transactionType;
         this.date = date;
-    }
+    }*/
 
     public EventMessage(long clientId, int amount, String ticker, double price, Type transactionType, String date) {
         this.clientId = clientId;
@@ -34,7 +57,7 @@ public class EventMessage {
     //empty constructor to be used in the gson responsible class
     public EventMessage() { }
 
-    public String toString() {
+    /*public String toString() {
         StringBuilder delimiter = new StringBuilder(" ");
         String typeOfTransaction = "";
         if (transactionType == Type.BUYER)
@@ -48,5 +71,5 @@ public class EventMessage {
         //else it's a buy/sell transaction
         return typeOfTransaction.toUpperCase() + " Transaction: client " + clientId + " decided to " + typeOfTransaction + " stock: " + ticker + " stock amount: " + amount + " for " + price +
                 " per stock. Date: " + date + "\n";
-    }
+    }*/
 }
